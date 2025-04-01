@@ -62,7 +62,7 @@ export async function doAttendanceForAccount(token: string, options: Options) {
 
   const [combineMessage, excutePushMessage, addMessage] = createCombinePushMessage()
 
-  addMessage('## 明日方舟签到')
+  addMessage('## xd帮忙明日方舟签到时刻到')
   let successAttendance = 0
   const characterList = list.map(i => i.bindingList).flat()
   const maxRetries = parseInt(process.env.MAX_RETRIES, 10) || 3 // 添加最大重试次数
@@ -77,30 +77,30 @@ export async function doAttendanceForAccount(token: string, options: Options) {
         })
         if (data) {
           if (data.code === 0 && data.message === 'OK') {
-            const msg = `${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 签到成功${`, 获得了${data.data.awards.map(a => `「${a.resource.name}」${a.count}个`).join(',')}`}`
+            const msg = `${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 签到成功${`, 猫娘xd成功从海猫那里窃取了${data.data.awards.map(a => `「${a.resource.name}」${a.count}个，谢谢xd喵`).join(',')}`}`
             combineMessage(msg)
             successAttendance++
             break // 签到成功，跳出重试循环
           }
           else {
-            const msg = `${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 签到失败${`, 错误消息: ${data.message}\n\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``}`
+            const msg = `${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 签到失败${`, 猫娘xd不够努力被发现了喵: ${data.message}\n\n\`\`\`json\n${JSON.stringify(data, null, 2)}\n\`\`\``}`
             combineMessage(msg, true)
             retries++ // 签到失败，增加重试计数器
           }
         }
         else {
-          combineMessage(`${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 今天已经签到过了`)
+          combineMessage(`${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 今天xd已经偷偷签到过了捏`)
           break // 已经签到过，跳出重试循环
         }
       }
       catch (error: any) {
         if (error.response && error.response.status === 403) {
-          combineMessage(`${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 今天已经签到过了`)
+          combineMessage(`${(Number(character.channelMasterId) - 1) ? 'B 服' : '官服'}角色 ${successAttendance + 1} 今天xd已经偷偷签到过了捏`)
           break // 已经签到过，跳出重试循环
         }
         else {
           combineMessage(`签到过程中出现未知错误: ${error.message}`, true)
-          console.error('发生未知错误，工作流终止。')
+          console.error('发生未知错误，工作流终止。都是丫丁干的喵。')
           retries++ // 增加重试计数器
           if (retries >= maxRetries) {
             process.exit(1) // 达到最大重试次数，终止工作流
